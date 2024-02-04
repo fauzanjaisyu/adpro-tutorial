@@ -29,8 +29,9 @@ public class ProductRepository {
         return null;
     }
 
-    public Product edit(Product productName, Product editedProduct){
-        productName.setProductQuantity(editedProduct.getProductQuantity());
-        return productName;
+    public Product edit(Product product, Product editedProduct){
+        product.setProductName(editedProduct.getProductName());
+        product.setProductQuantity(editedProduct.getProductQuantity());
+        return product;
     }
 }
