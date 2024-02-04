@@ -20,17 +20,4 @@ public class ProductRepository {
         return productData.iterator();
     }
 
-    public Product findById(String productId) {
-        for (Product product : productData) {
-            if (product.getProductId().equals(productId)) {
-                return product;
-            }
-        }
-        return null;
-    }
-
-    public Product edit(Product productName, Product editedProduct){
-        productName.setProductQuantity(editedProduct.getProductQuantity());
-        return productName;
-    }
 }
