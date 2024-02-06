@@ -34,4 +34,5 @@ public class ProductRepository {
         product.setProductQuantity(editedProduct.getProductQuantity());
         return product;
     }
+
 }

@@ -35,6 +35,7 @@ public class ProductController {
         return "productList";
     }
 
+
     @GetMapping("/edit/{productId}")
     public String editProductPage(@PathVariable String productId, Model model) {
         Product product = service.findById(productId);
@@ -49,4 +50,5 @@ public class ProductController {
         }
         return "redirect:/product/list";
     }
+
 }
