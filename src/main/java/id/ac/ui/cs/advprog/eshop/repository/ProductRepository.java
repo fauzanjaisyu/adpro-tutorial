@@ -31,6 +31,11 @@ public class ProductRepository {
 
     public Product delete(Product product) {
         productData.remove(product);
+    }
+  
+    public Product edit(Product product, Product editedProduct){
+        product.setProductName(editedProduct.getProductName());
+        product.setProductQuantity(editedProduct.getProductQuantity());
         return product;
     }
 
