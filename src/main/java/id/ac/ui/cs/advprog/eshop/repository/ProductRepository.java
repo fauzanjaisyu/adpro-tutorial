@@ -31,6 +31,7 @@ public class ProductRepository {
 
     public Product delete(Product product) {
         productData.remove(product);
+        return product;
     }
   
     public Product edit(Product product, Product editedProduct){
