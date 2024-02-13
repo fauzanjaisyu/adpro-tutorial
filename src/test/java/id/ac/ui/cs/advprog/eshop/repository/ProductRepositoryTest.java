@@ -94,4 +94,69 @@ class ProductRepositoryTest {
         assertEquals(updatedProduct.getProductId(), product.getProductId());
     }
 
+    @Test
+    public void testCreateAndFindAll() {
+        Product product = new Product();
+        productRepository.create(product);
+
+        Iterator<Product> iterator = productRepository.findAll();
+        assertTrue(iterator.hasNext());
+        assertEquals(product, iterator.next());
+    }
+
+    @Test
+    public void testFindByIdExistingProduct() {
+        Product product1 = new Product();
+        product1.setProductId("1");
+        product1.setProductName("Product 1");
+        product1.setProductQuantity(10);
+        productRepository.create(product1);
+        Product found = productRepository.findById("1");
+        assertNotNull(found);
+        assertEquals("Product 1", found.getProductName());
+    }
+
+    @Test
+    public void testFindByIdNonExistingProduct() {
+        Product product1 = new Product();
+        product1.setProductId("1");
+        product1.setProductName("Product 1");
+        product1.setProductQuantity(10);
+        productRepository.create(product1);
+        Product found = productRepository.findById("nonExistingId");
+        assertNull(found);
+    }
+
+    @Test
+    public void testDeleteProductNew() {
+        Product product1 = new Product();
+        product1.setProductId("1");
+        product1.setProductName("Product 1");
+        product1.setProductQuantity(10);
+        productRepository.create(product1);
+        Product deleted = productRepository.delete(product1);
+        assertNotNull(deleted);
+        Product found = productRepository.findById("1");
+        assertNull(found);
+    }
+
+    @Test
+    public void testEditProductNew() {
+        Product product1 = new Product();
+        product1.setProductId("1");
+        product1.setProductName("Product 1");
+        product1.setProductQuantity(10);
+        productRepository.create(product1);
+
+        Product editedProduct = new Product();
+        editedProduct.setProductId("1");
+        editedProduct.setProductName("Product 1 Edited");
+        editedProduct.setProductQuantity(15);
+        productRepository.edit(product1, editedProduct);
+        Product found = productRepository.findById("1");
+        assertNotNull(found);
+        assertEquals("Product 1 Edited", found.getProductName());
+        assertEquals(15, found.getProductQuantity());
+    }
+
 }
