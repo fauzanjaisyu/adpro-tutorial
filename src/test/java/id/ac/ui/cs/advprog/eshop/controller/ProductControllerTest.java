@@ -43,6 +43,7 @@ public class ProductControllerTest {
         mockMvc.perform(get("/product/create"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("product"));
+        verify(productService, times(0)).create(any(Product.class));
     }
 
     @Test
@@ -62,6 +63,7 @@ public class ProductControllerTest {
         mockMvc.perform(get("/product/list"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("products", allProducts));
+        verify(productService, times(1)).findAll();
     }
 
     @Test
@@ -83,6 +85,7 @@ public class ProductControllerTest {
         mockMvc.perform(get("/product/edit/{productId}", "1"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("product"));
+        verify(productService, times(1)).findById("1");
     }
 
     @Test
