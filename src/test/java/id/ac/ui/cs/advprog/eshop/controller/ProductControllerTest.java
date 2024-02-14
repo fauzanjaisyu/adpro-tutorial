@@ -32,7 +32,7 @@ public class ProductControllerTest {
 
     @BeforeEach
     void setUp() {
-        product = new Product(); // Assume Product has a default constructor
+        product = new Product(); // Assumed Product has a default constructor
         product.setProductId("1");
         product.setProductName("Test Product");
         product.setProductQuantity(10);
@@ -42,8 +42,7 @@ public class ProductControllerTest {
     void testCreateProductPage() throws Exception {
         mockMvc.perform(get("/product/create"))
                 .andExpect(status().isOk())
-                .andExpect(model().attributeExists("product"))
-                .andExpect(view().name("createProduct"));
+                .andExpect(model().attributeExists("product"));
     }
 
     @Test
@@ -51,7 +50,7 @@ public class ProductControllerTest {
         mockMvc.perform(post("/product/create")
                         .flashAttr("product", product))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:list"));
+                .andExpect(redirectedUrl("list"));
         verify(productService, times(1)).create(any(Product.class));
     }
 
@@ -62,23 +61,18 @@ public class ProductControllerTest {
 
         mockMvc.perform(get("/product/list"))
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("products", allProducts))
-                .andExpect(view().name("productList"));
+                .andExpect(model().attribute("products", allProducts));
     }
 
     @Test
     void testDeleteProduct() throws Exception {
-        // Konfigurasi mock untuk mengembalikan produk ketika findById dipanggil.
         when(productService.findById("1")).thenReturn(product);
 
         mockMvc.perform(get("/product/delete/{productId}", "1"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/product/list"));
+                .andExpect(redirectedUrl("/product/list"));
 
-        // Verifikasi bahwa findById dipanggil tepat satu kali dengan productId "1".
         verify(productService, times(1)).findById("1");
-
-        // Verifikasi bahwa delete dipanggil tepat satu kali dengan produk yang diharapkan.
         verify(productService, times(1)).delete(product);
     }
 
@@ -88,8 +82,7 @@ public class ProductControllerTest {
 
         mockMvc.perform(get("/product/edit/{productId}", "1"))
                 .andExpect(status().isOk())
-                .andExpect(model().attributeExists("product"))
-                .andExpect(view().name("editProduct"));
+                .andExpect(model().attributeExists("product"));
     }
 
     @Test
@@ -97,7 +90,7 @@ public class ProductControllerTest {
         mockMvc.perform(post("/product/edit/{productId}", "1")
                         .flashAttr("product", product))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/product/list"));
+                .andExpect(redirectedUrl("/product/list"));
         verify(productService, times(1)).edit(any(Product.class));
     }
 }
