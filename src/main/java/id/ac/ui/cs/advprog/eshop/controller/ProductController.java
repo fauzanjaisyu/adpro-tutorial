@@ -12,13 +12,15 @@ import java.util.List;
 @Controller
 @RequestMapping("/product")
 public class ProductController {
+
+    private static final String PRODUCT = "product";
     @Autowired
     private ProductService service;
 
     @GetMapping("/create")
     public String createProductPage(Model model) {
         Product product = new Product();
-        model.addAttribute("product", product);
+        model.addAttribute(PRODUCT, product);
         return "createProduct";
     }
 
@@ -46,15 +48,14 @@ public class ProductController {
     @GetMapping("/edit/{productId}")
     public String editProductPage(@PathVariable String productId, Model model) {
         Product product = service.findById(productId);
-        model.addAttribute("product", product);
+        model.addAttribute(PRODUCT, product);
         return "editProduct";
     }
 
     @PostMapping("/edit/{productId}")
     public String editProductPost(@ModelAttribute Product product,@PathVariable String productId, Model model) {
-        if (productId.equals(product.getProductId())) {
-            service.edit(product);
-        }
+            Product editedProduct = service.edit(product);
+            model.addAttribute(PRODUCT, editedProduct);
         return "redirect:/product/list";
     }
 }
