@@ -3,6 +3,7 @@ plugins {
 	jacoco
 	id("org.springframework.boot") version "3.2.2"
 	id("io.spring.dependency-management") version "1.1.4"
+	id("org.sonarqube") version "3.5.0.2730"
 }
 
 group = "id.ac.ui.cs.advprog"
@@ -74,4 +75,9 @@ tasks.test {
 
 tasks.jacocoTestReport {
 	dependsOn(tasks.test)
+
+	reports {
+		html.required = true
+		xml.required = true
+	}
 }
