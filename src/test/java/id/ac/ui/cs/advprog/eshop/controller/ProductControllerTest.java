@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -21,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-@WebMvcTest(ProductController.class)
+@AutoConfigureMockMvc
 public class ProductControllerTest {
 
     @Autowired
@@ -57,16 +58,16 @@ public class ProductControllerTest {
         verify(productService, times(1)).create(any(Product.class));
     }
 
-//    @Test
-//    void testProductListPage() throws Exception {
-//        List<Product> allProducts = Arrays.asList(product);
-//        given(productService.findAll()).willReturn(allProducts);
-//
-//        mockMvc.perform(get("/product/list"))
-//                .andExpect(status().isOk())
-//                .andExpect(model().attribute("products", allProducts));
-//        verify(productService, times(1)).findAll();
-//    }
+    @Test
+    void testProductListPage() throws Exception {
+        List<Product> allProducts = Arrays.asList(product);
+        given(productService.findAll()).willReturn(allProducts);
+
+        mockMvc.perform(get("/product/list"))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("products", allProducts));
+        verify(productService, times(1)).findAll();
+    }
 
     @Test
     void testDeleteProduct() throws Exception {
@@ -80,15 +81,15 @@ public class ProductControllerTest {
         verify(productService, times(1)).delete(product);
     }
 
-//    @Test
-//    void testEditProductPage() throws Exception {
-//        given(productService.findById("1")).willReturn(product);
-//
-//        mockMvc.perform(get("/product/edit/{productId}", "1"))
-//                .andExpect(status().isOk())
-//                .andExpect(model().attributeExists("product"));
-//        verify(productService, times(1)).findById("1");
-//    }
+    @Test
+    void testEditProductPage() throws Exception {
+        given(productService.findById("1")).willReturn(product);
+
+        mockMvc.perform(get("/product/edit/{productId}", "1"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("product"));
+        verify(productService, times(1)).findById("1");
+    }
 
     @Test
     void testEditProductPost() throws Exception {
