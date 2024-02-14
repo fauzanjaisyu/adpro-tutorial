@@ -6,97 +6,93 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.MockMvc;
+import org.mockito.MockitoAnnotations;
+import org.springframework.ui.Model;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-public class ProductControllerTest {
+class ProductControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @MockBean
+    @Mock
     private ProductService productService;
 
-    private Product product;
+    @Mock
+    private Model model;
+
+    @InjectMocks
+    private ProductController productController;
 
     @BeforeEach
     void setUp() {
-        product = new Product(); // Assumed Product has a default constructor
-        product.setProductId("1");
-        product.setProductName("Test Product");
-        product.setProductQuantity(10);
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    void testCreateProductPage() throws Exception {
-        mockMvc.perform(get("/product/create"))
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("product"));
-        verify(productService, times(0)).create(any(Product.class));
+    void testCreateProductPage() {
+        Product product = new Product();
+        String expectedViewName = "createProduct";
+        String actualViewName = productController.createProductPage(model);
+        assertEquals(expectedViewName, actualViewName);
     }
 
     @Test
-    void testCreateProductPost() throws Exception {
-        mockMvc.perform(post("/product/create")
-                        .flashAttr("product", product))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("list"));
-        verify(productService, times(1)).create(any(Product.class));
+    void testCreateProductPost() {
+        Product product = new Product();
+        String expectedViewName = "redirect:list";
+        String actualViewName = productController.createProductPost(product, model);
+        assertEquals(expectedViewName, actualViewName);
+        verify(productService, times(1)).create(product);
     }
 
     @Test
-    void testProductListPage() throws Exception {
-        List<Product> allProducts = Arrays.asList(product);
-        given(productService.findAll()).willReturn(allProducts);
+    void testProductListPage() {
+        List<Product> allProducts = new ArrayList<>();
+        when(productService.findAll()).thenReturn(allProducts);
 
-        mockMvc.perform(get("/product/list"))
-                .andExpect(status().isOk())
-                .andExpect(model().attribute("products", allProducts));
-        verify(productService, times(1)).findAll();
+        String expectedViewName = "productList";
+        String actualViewName = productController.productListPage(model);
+        assertEquals(expectedViewName, actualViewName);
+        verify(model, times(1)).addAttribute("products", allProducts);
     }
 
     @Test
-    void testDeleteProduct() throws Exception {
-        when(productService.findById("1")).thenReturn(product);
+    void testDeleteProduct() {
+        Product product = new Product();
+        String productId = product.getProductId();
+        when(productService
+                .findById(productId))
+                .thenReturn(product);
 
-        mockMvc.perform(get("/product/delete/{productId}", "1"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/product/list"));
-
-        verify(productService, times(1)).findById("1");
+        String expectedViewName = "redirect:/product/list";
+        String actualViewName = productController.deleteProduct(productId);
+        assertEquals(expectedViewName, actualViewName);
         verify(productService, times(1)).delete(product);
     }
-
+    //
     @Test
-    void testEditProductPage() throws Exception {
-        given(productService.findById("1")).willReturn(product);
+    void testEditProductPage() {
+        Product product = new Product();
+        String productId = product.getProductId();
+        when(productService
+                .findById(productId))
+                .thenReturn(product);
 
-        mockMvc.perform(get("/product/edit/{productId}", "1"))
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("product"));
-        verify(productService, times(1)).findById("1");
+        String expectedViewName = "editProduct";
+        String actualViewName = productController.editProductPage(productId, model);
+        assertEquals(expectedViewName, actualViewName);
+        verify(model, times(1)).addAttribute("product", product);
     }
 
     @Test
-    void testEditProductPost() throws Exception {
-        mockMvc.perform(post("/product/edit/{productId}", "1")
-                        .flashAttr("product", product))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/product/list"));
-        verify(productService, times(1)).edit(any(Product.class));
+    void testEditProductPost() {
+        Product product = new Product();
+        String expectedViewName = "redirect:/product/list";
+        String actualViewName = productController.editProductPost(product, product.getProductId(), model);
+        assertEquals(expectedViewName, actualViewName);
+        verify(productService, times(1)).edit(product);
     }
 }
