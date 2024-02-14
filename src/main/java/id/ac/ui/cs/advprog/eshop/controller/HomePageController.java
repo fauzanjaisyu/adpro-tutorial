@@ -11,6 +11,6 @@ import org.springframework.ui.Model;
 public class HomePageController {
     @GetMapping("/")
     public String homePage(Model model) {
-        return "homePage";
+        return "HomePage";
     }
 }
