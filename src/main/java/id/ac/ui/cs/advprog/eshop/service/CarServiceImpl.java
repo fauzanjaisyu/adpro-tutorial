@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
+
+@Service
 public class CarServiceImpl implements CarService{
     @Autowired
     private CarRepository carRepository;
