@@ -49,3 +49,11 @@ kualitas kode. Workflows tersebut juga akan melakukan deployment tiap kali saya 
    ditulis sulit dipahami orang lain, alias keterbalikan dari keuntungan yang sudah tertera pada nomor 2. Contohnya apabila saya tidak menerapkan prinsip SRP
    pada `CarController` maka kedepannya saya akan kesulitan untuk melakukan perubahan terhadap suatu fungsi, dengan dilakukan pemisahan berdasarkan fungsinya
    maka saya akan lebih mudah untuk melakukan perbaikan
+
+# **Modul 4**
+
+1. Meski sulit untuk memahami alur TDD karena alur TDD ini justru dimulai dari menulis test dahulu sebelum menulis kode, namun menurut saya alur TDD membantu saya untuk
+   mengklarifikasi apa yang ingin saya capai dengan kode saya, selain itu TDD mendorong siklus cepat antara menulis tes, implementasi kode, dan refaktorisasi.
+
+2. Menurut saya, test yang saya buat belum sepenuhnya menerapkan prinsip F.I.R.S.T dan baru sebagian seperti membuat test happy dan unhappy, mungkin yang perlu saya lakukan
+   kedepannya adalah membuat test-cpverage menjadi 100%
