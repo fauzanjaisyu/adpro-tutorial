@@ -3,6 +3,7 @@ package id.ac.ui.cs.advprog.eshop.model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import id.ac.ui.cs.advprog.eshop.enums.PaymentMethod;
 import id.ac.ui.cs.advprog.eshop.enums.PaymentStatus;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -50,11 +51,11 @@ public class PaymentBankTransferTest {
         paymentDataBankTransfer.put("bankName", "BNI");
         paymentDataBankTransfer.put("referenceCode", "0123456789");
 
-        Payment payment = new PaymentBankTransfer("ec556e96-10a5-4d47-a068-d45c6fca71c0", orders.get(0), "BANK", paymentDataBankTransfer);
+        Payment payment = new PaymentBankTransfer("ec556e96-10a5-4d47-a068-d45c6fca71c0", orders.get(0), PaymentMethod.BANK.getValue(), paymentDataBankTransfer);
         assertSame(orders.get(0), payment.getOrder());
         assertEquals(paymentDataBankTransfer, payment.getPaymentData());
         assertEquals("ec556e96-10a5-4d47-a068-d45c6fca71c0", payment.getId());
-        assertEquals("BANK", payment.getMethod());
+        assertEquals(PaymentMethod.BANK.getValue(), payment.getMethod());
     }
 
     @Test
@@ -64,10 +65,10 @@ public class PaymentBankTransferTest {
         paymentDataBankTransfer.put("referenceCode", "0123456789");
 
         PaymentBankTransfer paymentBankTransfer = new PaymentBankTransfer("ec556e96-10a5-4d47-a068-d45c6fca71c0",
-                orders.get(0), "BANK", paymentDataBankTransfer, PaymentStatus.SUCCESS.getValue());
+                orders.get(0), PaymentMethod.BANK.getValue(), paymentDataBankTransfer, PaymentStatus.SUCCESS.getValue());
         assertSame(orders.get(0), paymentBankTransfer.getOrder());
         assertEquals("ec556e96-10a5-4d47-a068-d45c6fca71c0", paymentBankTransfer.getId());
-        assertEquals("BANK", paymentBankTransfer.getMethod());
+        assertEquals(PaymentMethod.BANK.getValue(), paymentBankTransfer.getMethod());
         assertEquals(paymentDataBankTransfer, paymentBankTransfer.getPaymentData());
         assertEquals(PaymentStatus.SUCCESS.getValue(), paymentBankTransfer.getStatus());
     }
@@ -80,7 +81,7 @@ public class PaymentBankTransferTest {
 
         assertThrows(IllegalArgumentException.class, ()-> {
             new PaymentBankTransfer("ec556e96-10a5-4d47-a068-d45c6fca71c0", orders.get(1),
-                    "BANK", paymentDataBankTransfer);
+                    PaymentMethod.BANK.getValue(), paymentDataBankTransfer);
         });
     }
 
@@ -92,7 +93,7 @@ public class PaymentBankTransferTest {
 
         assertThrows(IllegalArgumentException.class, ()-> {
             new PaymentBankTransfer("ec556e96-10a5-4d47-a068-d45c6fca71c0", orders.get(1),
-                    "BANK", paymentDataBankTransfer);
+                    PaymentMethod.BANK.getValue(), paymentDataBankTransfer);
         });
     }
 }
