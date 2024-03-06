@@ -13,5 +13,11 @@ public class PaymentBankTransfer extends Payment {
 
     @Override
     protected void setPaymentData(Map<String, String> paymentData) {
+        if (paymentData.get("bankName").isBlank() ||
+                paymentData.get("referenceCode").isBlank()) {
+            throw new IllegalArgumentException();
+        }
+
+        this.paymentData = paymentData;
     }
 }
