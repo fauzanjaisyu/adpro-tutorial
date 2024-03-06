@@ -13,5 +13,19 @@ public class PaymentVoucherCode extends Payment {
 
     @Override
     protected void setPaymentData(Map<String, String> paymentData) {
+        int numericsCount = 0;
+        for (int i = 0; i < paymentData.get("voucherCode").length(); i++) {
+            if (Character.isDigit(paymentData.get("voucherCode").charAt(i))) {
+                numericsCount += 1;
+            }
+        }
+
+        if (paymentData.get("voucherCode").length() != 16 ||
+                !paymentData.get("voucherCode").startsWith("ESHOP") ||
+                numericsCount != 8) {
+            throw new IllegalArgumentException();
+        }
+
+        this.paymentData = paymentData;
     }
 }
